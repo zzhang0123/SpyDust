@@ -31,14 +31,14 @@ def mu2_f_cond(env, a, beta, fZ, mu_rms, ip, Ndipole, tumbling=True, omega_min=1
     - Ndipole: Number of dipole values used in averaging.
     - tumbling: Boolean to indicate whether the grains are tumbling disklike grains.
     Returns:
-    - A numpy array [2, Nomega] containing omega, <mu_ip^2 fa(omega)>, and <mu_op^2 fa(omega)>.
+    - A numpy array 3, Nomega] containing omega, <mu_ip^2 fa(omega)>, and <mu_op^2 fa(omega)>.
     """
     op = 1.0 - ip  # Out-of-plane dipole moment fraction
 
     if Ndipole == 1:  # Not averaging over dipoles
         mu_ip = np.array([np.sqrt(ip) * mu_rms]) # shape (1,)
         mu_op = np.array([np.sqrt(op) * mu_rms]) # shape (1,)
-        log_f_a = log_f_rot(env, a, beta, fZ, mu_ip, mu_op, 
+        _, log_f_a = log_f_rot(env, a, beta, fZ, mu_ip, mu_op, 
                            tumbling=tumbling, 
                            omega_min=omega_min, omega_max=omega_max, Nomega=Nomega, use_spdust_plasma=spdust_plasma)
         f_a = np.exp(log_f_a)
@@ -72,7 +72,7 @@ def mu2_f_cond(env, a, beta, fZ, mu_rms, ip, Ndipole, tumbling=True, omega_min=1
             mu_ip = mu_ip.flatten()
             mu_op = mu_op.flatten()
             Proba = Proba.flatten()
-            log_f_a = log_f_rot(env, a, beta, fZ, mu_ip, mu_op, 
+            _, log_f_a = log_f_rot(env, a, beta, fZ, mu_ip, mu_op, 
                                tumbling=tumbling,  
                                omega_min=omega_min, 
                                omega_max=omega_max, 
@@ -93,7 +93,7 @@ def mu2_f_cond(env, a, beta, fZ, mu_rms, ip, Ndipole, tumbling=True, omega_min=1
         else:  # Spherical grains, average over grain orientation first
             Proba = x_tab**2 * np.exp(-1.5 * x_tab**2) * Dx_tab
             Proba = Proba / np.sum(Proba)
-            log_f_a = log_f_rot(env, a, beta, fZ, np.sqrt(2/3) * mu_rms * x_tab, mu_rms / np.sqrt(3) * x_tab, 
+            _, log_f_a = log_f_rot(env, a, beta, fZ, np.sqrt(2/3) * mu_rms * x_tab, mu_rms / np.sqrt(3) * x_tab, 
                                tumbling=tumbling,  omega_min=omega_min, omega_max=omega_max, Nomega=Nomega, use_spdust_plasma=spdust_plasma)
             f_a = np.exp(log_f_a)
             Proba = np.outer(Proba, np.ones(Nomega))

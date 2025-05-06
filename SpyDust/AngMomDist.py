@@ -307,7 +307,7 @@ def log_f_rot(env, a, beta, fZ, mu_ip, mu_op, tumbling=True, omega_min=1e8, omeg
         aux_result_mu = aux_result[ind, :]
         interp_func = interp1d(log_Omega, aux_result_mu, kind='cubic', fill_value='extrapolate')
         result[ind, :] = interp_func(omegaVec_log)
-    return result
+    return omegaVec_log, result
 
     
 def f_rot_old(env, a, beta, fZ, mu_ip, mu_op, tumbling=True, omega_min=1e7, omega_max=1e11, Nomega=1000):
