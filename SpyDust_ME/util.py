@@ -227,6 +227,23 @@ def logx_interp_func_1d(log_x_grid, y_grid, kind='cubic'):
     
     return Interpolator1D(logx_interp, logx=True, logy=False)
 
+def interp_func_1d(coord_grid, data_grid, kind='cubic', log_coord=True, log_data=True):
+    '''
+    Args:
+        
+        kind: str, the interpolation method, default is 'cubic'
+    Returns:
+        Interpolator1D function instance, whose input and output are both in ordinary scale.
+    '''
+            
+    # Verify monotonicity after transformations
+    if not np.all(np.diff(coord_grid) > 0):
+        raise ValueError("Grid points must be monotonically increasing in log space")
+        
+    myinterp = interp1d(coord_grid, data_grid, kind=kind, fill_value='extrapolate')
+    
+    return Interpolator1D(myinterp, logx=log_coord, logy=log_data)
+
 
 def homogeneous_dist(*args, **kwargs):
     """Constant distribution function that always returns 1"""
