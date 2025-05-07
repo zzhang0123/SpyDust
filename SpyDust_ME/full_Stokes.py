@@ -1,7 +1,7 @@
 from ast import arg
 import numpy as np
 from scipy import integrate
-from util import ParallelInterpolator, ParallelBase, interp_func_1d
+from util import ParallelInterpolator, ParallelBase, logx_interp_func_1d
 # Use functools.partial to pass extra arguments
 from functools import partial
 
@@ -295,15 +295,15 @@ class mode4(ModeBase):
         return np.array([I, Q, U, V]) 
 
 class full_Stokes_SED():
-    def __init__(self, rot_dist_func=None, log_Omega_grid=None, log_rot_dist_grid=None):
+    def __init__(self, rot_dist_func=None, log_Omega_grid=None, rot_dist_grid=None):
         self.mode1 = mode1()
         self.mode2and3 = mode2and3()
         self.mode4 = mode4()
         if rot_dist_func is not None:
             self.rot_dist_func = rot_dist_func
         else:
-            assert log_Omega_grid is not None and log_rot_dist_grid is not None, "Please provide the rotation distribution function or the grid points."
-            self.rot_dist_func = interp_func_1d(log_Omega_grid, log_rot_dist_grid)
+            assert log_Omega_grid is not None and rot_dist_grid is not None, "Please provide the rotation distribution function or the grid points."
+            self.rot_dist_func = logx_interp_func_1d(log_Omega_grid, rot_dist_grid)
 
     def generate_SED(self, omegas, beta, ip, mu_sq,
                      internal_dist=None, 

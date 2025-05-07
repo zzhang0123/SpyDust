@@ -163,18 +163,18 @@ class Interpolator1D:
         #     self.__call__ = self.uniformx_uniformy
         
     def loglog(self, xs):
-        log_xs = np.log10(xs)
+        log_xs = np.log(xs)
         log_ys = self.interp(log_xs)
-        return 10.**log_ys
+        return np.exp(log_ys)
 
     def logx_uniformy(self, xs):
-        log_xs = np.log10(xs)
+        log_xs = np.log(xs)
         ys = self.interp(log_xs)
         return ys
 
     def uniformx_logy(self, xs):
         log_ys = self.interp(xs)
-        return 10.**log_ys
+        return np.exp(log_ys)
 
     def uniformx_uniformy(self, xs):
         ys = self.interp(xs)
@@ -191,11 +191,11 @@ class Interpolator1D:
             return self.uniformx_uniformy(xs)
 
 
-def interp_func_1d(log_x_grid, log_y_grid, kind='cubic'):
+def loglog_interp_func_1d(log_x_grid, log_y_grid, kind='cubic'):
     '''
     Args:
-        log_x_grid: 1D array, the log10 transformed coordinate grid feeded to the interpolator
-        log_y_grid: 1D array, the log10 transformed function values
+        log_x_grid: 1D array, the log transformed coordinate grid feeded to the interpolator
+        log_y_grid: 1D array, the log transformed function values
         kind: str, the interpolation method, default is 'cubic'
     Returns:
         Interpolator1D function instance, whose input and output are both in ordinary scale.
@@ -208,6 +208,24 @@ def interp_func_1d(log_x_grid, log_y_grid, kind='cubic'):
     log_interp = interp1d(log_x_grid, log_y_grid, kind=kind, fill_value='extrapolate')
     
     return Interpolator1D(log_interp, logx=True, logy=True)
+
+def logx_interp_func_1d(log_x_grid, y_grid, kind='cubic'):
+    '''
+    Args:
+        log_x_grid: 1D array, the log transformed coordinate grid feeded to the interpolator
+        log_y_grid: 1D array, the log transformed function values
+        kind: str, the interpolation method, default is 'cubic'
+    Returns:
+        Interpolator1D function instance, whose input and output are both in ordinary scale.
+    '''
+            
+    # Verify monotonicity after transformations
+    if not np.all(np.diff(log_x_grid) > 0):
+        raise ValueError("Grid points must be monotonically increasing in log space")
+        
+    logx_interp = interp1d(log_x_grid, y_grid, kind=kind, fill_value='extrapolate')
+    
+    return Interpolator1D(logx_interp, logx=True, logy=False)
 
 
 def homogeneous_dist(*args, **kwargs):
