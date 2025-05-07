@@ -511,7 +511,7 @@ def IRemission(a, Z, nu_tab,  Energy_modes_op, Energy_modes_ip, Energy_modes_CH,
 
 def FGIR_integrals(a, Z, Chi,  Energy_modes_op, Energy_modes_ip, Energy_modes_CH, Mval, Energy_max):
     """
-    Computes the integrals \int F_nu/nu^2 dnu and \int F_nu/nu dnu.
+    Computes the integrals int F_nu/nu^2 dnu and int F_nu/nu dnu.
     Parameters:
     - a: Grain radius.
     - Z: Grain charge.

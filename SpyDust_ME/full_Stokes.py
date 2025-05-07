@@ -189,7 +189,8 @@ class ModeBase():
                      rot_dist_func=None, 
                      max_workers=None, 
                      full_Stokes=True, ):
-        """This function generates the average (expected) SED of the single grain
+        """
+        This function generates the average (expected) SED (divided by mu^2) of the single grain.
         """
         
         internal_part = self.int_integral(omegas, beta, internal_dist, rot_dist_func, impulse=impulse,

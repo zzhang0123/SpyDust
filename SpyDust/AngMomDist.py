@@ -202,8 +202,8 @@ def log_f_rot(env, a, beta, fZ, mu_ip, mu_op, tumbling=True, omega_min=1e8, omeg
     Returns the rotational distribution function f_a:
     f(Omega | a, beta, mu)
     The function is calculated at frequencies centered on the approximate peak frequency
-    of the emitted power. The output is a dictionary {omega, f_a} containing:
-    - omega: array of frequencies.
+    of the emitted power. The output is a dictionary {Omega, f_a} containing:
+    - Omega: array of rotational frequencies.
     - f_a: rotational distribution function (2D array with dimensions [Nmu, Nomega]).
 
     Parameters:
